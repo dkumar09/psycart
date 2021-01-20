@@ -70,7 +70,7 @@ CREATE TABLE `psycart`.`product_review`(
     `parentId` BIGINT NULL DEFAULT NULL,
     `title` VARCHAR(100) NOT NULL,
     `rating` SMALLINT(6) NOT NULL DEFAULT 0,
-    `published` TINYINT(2) NOT NULL DEFAULT 0,
+    `published` TINYINT(1) NOT NULL DEFAULT 0,
     `createdAt` DATETIME NOT NULL,
     `publishedAt` DATETIME NULL DEFAULT NULL,
     `content` TEXT NULL DEFAULT NULL,
@@ -83,6 +83,80 @@ CREATE TABLE `psycart`.`product_review`(
     ON UPDATE NO ACTION
 );
 ALTER TABLE `psycart`.`product_review`
-ADD INDEX  `idx_review_parent` (`parentID` ASC);
+ADD    INDEX  `idx_review_parent` (`parentId` ASC);
 ALTER TABLE `psycart`.`product_review`
-ADD CONSTRAINT 
+ADD CONSTRAINT `psycart`.`fk_review_product`
+    FOREIGN KEY (`parentId`)
+    REFERENCES `psycart`.`product_review` (`id`)
+    ON DELETE NO ACTION
+    On UPDATE NO ACTION
+;
+--CATEGORY TABLE
+
+CREATE TABLE `psycart`.`category`(
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `parentId` BIGINT NULL DEFAULT NULL,
+    `title` VARCHAR(75) NOT NULL,
+    `metaTitle` VARCHAR(100) NULL DEFAULT NULL,
+    `slug` VARCHAR(100) NOT NULL,
+    `content` TEXT NULL DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);
+ALTER TABLE `psycart`.`category`
+ADD INDEX `idx_category_parent` (`parentId` ASC);
+ALTER TABLE `psycart`.`category`
+ADD CONSTRAINT `fk_category_parent`
+    FOREIGN KEY(`parentId`)
+    REFERENCES `psycart`.`category`(`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--PRODUCT CATEGORY
+
+CREATE TABLE `psycart`.`product_category`(
+    `productId` BIGINT NOT NULL,
+    `categoryId` BIGINT NOT NULL,
+    PRIMARY KEY(`productId`,`categoryId`),
+    INDEX `idx_pc_category` (`categoryId` ASC),
+    INDEX `idx_pc_product` (`productId` ASC),
+    CONSTRAINT `fk_pc_product`
+        FOREIGN KEY(`productId`)
+        REFERENCES `psycart`.`product` (`id`)
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT `fk_pc_category`
+        FOREIGN KEY(`categoryId`)
+        REFERENCES `psycart`.`category`(`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+);
+
+--CART TABLE
+CREATE TABLE `psycart`.`cart` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `userId` BIGINT NULL DEFAULT NULL,
+  `sessionId` VARCHAR(100) NOT NULL,
+  `token` VARCHAR(100) NOT NULL,
+  `status` SMALLINT(6) NOT NULL DEFAULT 0,
+  `firstName` VARCHAR(50) NULL DEFAULT NULL,
+  `middleName` VARCHAR(50) NULL DEFAULT NULL,
+  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `mobile` VARCHAR(15) NULL,
+  `email` VARCHAR(50) NULL,
+  `line1` VARCHAR(50) NULL DEFAULT NULL,
+  `line2` VARCHAR(50) NULL DEFAULT NULL,
+  `city` VARCHAR(50) NULL DEFAULT NULL,
+  `province` VARCHAR(50) NULL DEFAULT NULL,
+  `country` VARCHAR(50) NULL DEFAULT NULL,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NULL DEFAULT NULL,
+  `content` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idx_cart_user` (`userId` ASC),
+  CONSTRAINT `fk_cart_user`
+    FOREIGN KEY (`userId`)
+    REFERENCES `psycart`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+--CART ITEM
+CREATE TABLE `psycart`.`cart_item`
