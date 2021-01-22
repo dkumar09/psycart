@@ -1,0 +1,11 @@
+html
+    head
+        title Signup
+    body
+        - const lst = JSON.parse(list)
+        each val in lst
+            div 
+                p= val.name
+                p= val.rating
+                p= val.price
+                a(href= val.url) hola amigos

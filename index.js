@@ -7,9 +7,9 @@ var db = require('./JS/db');
 var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
-
 var app  = express();
 var router = express.Router();
+
 app.set('view engine', 'pug');
 app.set('views','./views')
 db.db();
@@ -20,7 +20,7 @@ app.use(session({
     resave:true,
     saveUninitialized:true
 }));
-
+app.use(require("./JS/routes"));
 function checkSignIn(req,res){
     if(req.session.user){
         next();
@@ -108,6 +108,43 @@ app.get('/logout',(req,res)=>{
     });
     res.redirect('/login');
 });
+
+//products
+app.get('/products',(req,res)=>{
+    db.products.findAll().then((data)=>{
+        res.render('products',{list:JSON.stringify(data)})
+        console.log(JSON.stringify(data));
+    }).catch((err)=>{
+        console.log(err);
+    });
+})
+app.get('/products/:productname',(req,res)=>{
+    console.log(req.params);
+    res.send(req.params.productname);
+})
+//order
+app.get('/order',(req,res)=>{
+    res.render('order')
+})
+app.post('/order',(req,res)=>{
+    return db.order.create({
+        userid:req.body.userid,
+        productid:req.body.productid,
+        createdAt:new Date(Date.now()).toISOString(),
+        updatedAt:null
+        }
+    ).then((users)=>{
+        if(users){
+            console.log(users);
+            res.redirect("/products");
+        }else{
+            res.status(400).send("error");
+        }
+    }).catch((err)=>{
+        console.log(err);
+    });
+})
+
 
 
 router.get('/',(req,res)=>{
