@@ -23,7 +23,13 @@ const users = sequelize.define('users',{
     password:{
         type:DataTypes.STRING(32),
         allowNull:false
+    },
+    admin:{
+        type:DataTypes.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
     }
+
 }) 
 const products = sequelize.define('products',{
     id:{
