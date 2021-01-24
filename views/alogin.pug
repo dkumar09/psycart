@@ -5,14 +5,12 @@ block content
     div(class="card mx-auto  p-3" style="margin-top:100px;max-width:25%;min-width:20%;")
         div(class="card-title")
             h4(class="text-center text-body") PSYCART
-            h5(class="text-center text-primary") Register
+            h5(class="text-center text-danger") Admin login
         div(class="card-body")    
             form(action="/admin/login" method = "POST")
                 div(class='form-outline mb-4')
                     input(name = "username" id="username" class="form-control" type = "text" required placeholder="Username")
                     //-label(for="username" class="form-label") Username
-                div(class='form-outline mb-4')
-                    input(name = "email" type = "email" id="email" class="form-control"  required placeholder = "Email")
                 div(class='form-outline mb-4')
                     input(name = "password" id="password" class="form-control" type = "password" required placeholder = "Password")
                     //-label(for="password" class="form-label") Password
@@ -22,6 +20,5 @@ block content
                             input(class="form-check-input" type="checkbox" value="" id="keeplogin" unchecked)
                             label(class="form-check-label" for="keeplogin") Remember me
                     div(class="col")
-                        a(href="/login") Already have an account
-                div(class="row")
-                    button(type = "submit" class="btn btn-primary btn-block") Register
+                        a(href="/reset") Forgot password
+                button(type = "submit" class="btn btn-primary btn-block") Log in

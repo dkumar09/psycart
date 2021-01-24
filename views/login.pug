@@ -1,10 +1,29 @@
-html
-    head
-        title login
-    body
-        if(message)
-            h4 #(message)
-        form(action="/login" method = "POST")
-            input(name = "id" type = "text" required placeholder = "User ID")
-            input(name = "password" type = "password" required placeholder = "Password")
-            button(type = "Submit") Log in
+extends layout.pug
+block content
+    if(message)
+        h4 #{message}
+    div(class="card mx-auto  p-3" style="margin-top:100px;max-width:25%;min-width:20%;")
+        div(class="card-title")
+            h4(class="text-center text-body") PSYCART
+            h5(class="text-center text-primary") Login
+        div(class="card-body")    
+            form(action="/login" method = "POST")
+                div(class='form-outline mb-4')
+                    input(name = "username" id="username" class="form-control" type = "text" required placeholder="Username")
+                    //-label(for="username" class="form-label") Username
+                div(class='form-outline mb-4')
+                    input(name = "password" id="password" class="form-control" type = "password" required placeholder = "Password")
+                    //-label(for="password" class="form-label") Password
+                div(class="row mb-4")
+                    div(class="col d-flex justify-content-corner")
+                        div(class="form-check")
+                            input(class="form-check-input" type="checkbox" value="" id="keeplogin" checked)
+                            label(class="form-check-label" for="keeplogin") Remember me
+                    div(class="col")
+                        a(href="/reset") Forgot password
+                div(class="row")
+                    button(type = "submit" class="btn btn-primary btn-block") Log in
+                br/
+                div(class="text-center")
+                    p Not a member?
+                            a(href="/signup") Register
