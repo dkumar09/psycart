@@ -117,3 +117,5 @@ dist
 
 #vscode
 .vscode
+test.js
+.gitignore
